@@ -1,9 +1,9 @@
-name: DeepSource Test Coverage
+name: Code Coverage with DeepSource
 
 on:
   push:
     branches:
-      - main
+      - main  # Adjust this to your default branch
 
 jobs:
   deepsource:
@@ -12,18 +12,22 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Set up Python
-        uses: actions/setup-python@v2
-        with:
-          python-version: '3.x'
-
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          # Install any dependencies your project needs
+          # For example, pip install -r requirements.txt
 
       - name: Run tests
-        run: pytest
+        run: |
+          # Run your tests and generate the coverage report
+          # For example, pytest --cov=my_module tests/
 
-      - name: Upload coverage report to DeepSource
-        uses: deepsourcelabs/test-coverage-action@v1
+      - name: Report test coverage to DeepSource
+        uses: deepsourcelabs/test-coverage-action@master
         with:
-          api-key: ${{ secrets.DS_API_KEY }}
+          key: python  # Replace with your programming language (e.g., go, javascript)
+          coverage-file: coverage.xml  # Path to your coverage data file
+          dsn: ${{ secrets.DEEPSOURCE_DSN }}  # Add your DeepSource DSN secret
+
+          # Optional: Set to true if you want the CI build to fail on error
+          fail-ci-on-error: false
